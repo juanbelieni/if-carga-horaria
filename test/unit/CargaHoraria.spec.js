@@ -1,7 +1,6 @@
 'use strict'
 
-const { test } = use('Test/Suite')('Carga Horária')
-
+const { test, before } = use('Test/Suite')('Carga Horária')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Ppc = use('App/Models/Ppc')
@@ -16,8 +15,17 @@ const Carga = use('App/Models/Carga')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const CargaHoraria = use('App/Models/CargaHoraria')
 
+before(async () => {
+  await Professor.create({
+    id: 1,
+    nome: 'João',
+    siape: 123,
+  })
+})
 
-test('it have to calculate the year and semester of an annual subject', async ({ assert }) => {
+test('calculate the year and semester of an annual subject', async ({
+  assert,
+}) => {
   const ppc = await Ppc.create({
     nome: 'Técnico em Informática',
     formacao: 'Integrado',
@@ -39,10 +47,7 @@ test('it have to calculate the year and semester of an annual subject', async ({
     ppc_id: ppc.id,
   })
 
-  const professor = await Professor.create({
-    nome: 'Juliete',
-    siape: 123,
-  })
+  const professor = await Professor.find(1)
 
   const carga = await Carga.create({
     curso_id: curso.id,
@@ -56,7 +61,9 @@ test('it have to calculate the year and semester of an annual subject', async ({
   assert.isNull(cargaHoraria.semestre)
 })
 
-test('it have to calculate the year and semester of a semi-annual subject', async ({ assert }) => {
+test('calculate the year and semester of a semi-annual subject', async ({
+  assert,
+}) => {
   const ppc = await Ppc.create({
     nome: 'Técnico em Alimentos',
     formacao: 'Subsequente',
@@ -72,17 +79,14 @@ test('it have to calculate the year and semester of a semi-annual subject', asyn
   })
 
   const disciplina = await Disciplina.create({
-    nome: 'Tec. de Alimentos',
+    nome: 'Tecnologia de Alimentos',
     periodo: 3,
     duracao_aula: 45,
     aula_semana: 2,
     ppc_id: ppc.id,
   })
 
-  const professor = await Professor.create({
-    nome: 'Martinez',
-    siape: 80,
-  })
+  const professor = await Professor.find(1)
 
   const carga = await Carga.create({
     curso_id: curso.id,
@@ -95,21 +99,82 @@ test('it have to calculate the year and semester of a semi-annual subject', asyn
   assert.equal(cargaHoraria.ano, 2021)
   assert.equal(cargaHoraria.semestre, 1)
 
-  const curso2 = await Curso.create({
-    ano_ingresso: 2020,
-    semestre_ingresso: 2,
-    ppc_id: ppc.id,
+  curso.merge({ semestre_ingresso: 2 })
+  await curso.save()
+  await cargaHoraria.reload()
 
+  assert.equal(cargaHoraria.ano, 2021)
+  assert.equal(cargaHoraria.semestre, 2)
+})
+
+test('show correct name of a annual course', async ({ assert }) => {
+  const ppc = await Ppc.create({
+    nome: 'Técnico em Administração',
+    formacao: 'Subsequente',
+    duracao: 4,
+    ano: 2019,
+    semestral: false,
   })
 
-  const carga2 = await Carga.create({
-    curso_id: curso2.id,
+  const curso = await Curso.create({
+    ano_ingresso: 2020,
+    semestre_ingresso: 1,
+    ppc_id: ppc.id,
+  })
+
+  const disciplina = await Disciplina.create({
+    nome: 'Empreendedorismo',
+    periodo: 3,
+    duracao_aula: 45,
+    aula_semana: 2,
+    ppc_id: ppc.id,
+  })
+
+  const professor = await Professor.find(1)
+
+  const carga = await Carga.create({
+    curso_id: curso.id,
     professor_id: professor.id,
     disciplina_id: disciplina.id,
   })
 
-  const cargaHoraria2 = await CargaHoraria.find(carga2.id)
+  const cargaHoraria = await CargaHoraria.find(carga.id)
 
-  assert.equal(cargaHoraria2.ano, 2021)
-  assert.equal(cargaHoraria2.semestre, 2)
+  assert.equal(cargaHoraria.curso, 'Técnico em Administração Subsequente - 2020')
+})
+
+test('show correct name of a semi-annual course', async ({ assert }) => {
+  const ppc = await Ppc.create({
+    nome: 'Técnico em Administração',
+    formacao: 'Subsequente',
+    duracao: 4,
+    ano: 2019,
+    semestral: true,
+  })
+
+  const curso = await Curso.create({
+    ano_ingresso: 2020,
+    semestre_ingresso: 1,
+    ppc_id: ppc.id,
+  })
+
+  const disciplina = await Disciplina.create({
+    nome: 'Empreendedorismo',
+    periodo: 3,
+    duracao_aula: 45,
+    aula_semana: 2,
+    ppc_id: ppc.id,
+  })
+
+  const professor = await Professor.find(1)
+
+  const carga = await Carga.create({
+    curso_id: curso.id,
+    professor_id: professor.id,
+    disciplina_id: disciplina.id,
+  })
+
+  const cargaHoraria = await CargaHoraria.find(carga.id)
+
+  assert.equal(cargaHoraria.curso, 'Técnico em Administração Subsequente - 2020/1')
 })
