@@ -33,6 +33,7 @@ class PpcController {
    * @param {View} ctx.view
    */
   async create({ request, response, view }) {
+
   }
 
   /**
@@ -61,6 +62,8 @@ class PpcController {
   async show({
     params, request, response, view,
   }) {
+    const { id } = params
+    return Ppc.find(id)
   }
 
   /**
@@ -86,6 +89,14 @@ class PpcController {
    * @param {Response} ctx.response
    */
   async update({ params, request, response }) {
+    const { id } = params
+    const data = request.only(['nome', 'formacao', 'duracao', 'ano', 'semestral'])
+    const ppc = await Ppc.find(id)
+
+    ppc.merge(data)
+    await ppc.save()
+
+    return ppc
   }
 
   /**
@@ -97,6 +108,10 @@ class PpcController {
    * @param {Response} ctx.response
    */
   async destroy({ params, request, response }) {
+    const { id } = params
+
+    const ppc = await Ppc.find(id)
+    await ppc.delete()
   }
 }
 

@@ -17,4 +17,7 @@
 const Route = use('Route')
 
 Route.on('/').render('welcome')
-Route.resource('ppc', 'PpcController')
+Route.resource('ppcs', 'PpcController')
+  .validator(new Map([
+    [['ppcs.store'], ['StorePpc']],
+  ]))

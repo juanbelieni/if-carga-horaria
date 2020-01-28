@@ -11,7 +11,7 @@ class PpcSchema extends Schema {
       table.string('formacao').notNullable()
       table.integer('duracao').unsigned().notNullable()
       table.integer('ano').unsigned().notNullable()
-      table.boolean('semestral').notNullable()
+      table.boolean('semestral').notNullable().defaltTo(false)
       table.timestamps()
     })
   }
