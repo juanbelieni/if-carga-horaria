@@ -21,3 +21,5 @@ Route.resource('ppcs', 'PpcController')
   .validator(new Map([
     [['ppcs.store'], ['StorePpc']],
   ]))
+
+Route.resource('disciplinas', 'DisciplinaController')

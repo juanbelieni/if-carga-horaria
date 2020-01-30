@@ -93,6 +93,10 @@ class PpcController {
     const data = request.only(['nome', 'formacao', 'duracao', 'ano', 'semestral'])
     const ppc = await Ppc.find(id)
 
+    if (ppc === null) {
+      return response.status(404).send()
+    }
+
     ppc.merge(data)
     await ppc.save()
 
@@ -111,7 +115,13 @@ class PpcController {
     const { id } = params
 
     const ppc = await Ppc.find(id)
+
+    if (ppc === null) {
+      return response.status(404).send()
+    }
+
     await ppc.delete()
+    return response.status(200).send()
   }
 }
 
