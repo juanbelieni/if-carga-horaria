@@ -6,7 +6,7 @@ class StorePpc {
       nome: 'required',
       formacao: 'required',
       duracao: 'required',
-      ano: 'required',
+      ano: 'required|year',
     }
   }
 
