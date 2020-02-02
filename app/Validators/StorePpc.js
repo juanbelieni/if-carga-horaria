@@ -19,10 +19,11 @@ class StorePpc {
 
   get messages() {
     return {
-      'name.required': 'Esse campo é obrigatório',
+      'nome.required': 'Esse campo é obrigatório',
       'formacao.required': 'Esse campo é obrigatório',
       'duracao.required': 'Esse campo é obrigatório',
       'ano.required': 'Esse campo é obrigatório',
+      'ano.year': 'Insira um ano válido',
     }
   }
 }
