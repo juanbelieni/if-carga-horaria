@@ -25,4 +25,6 @@ Route.resource('disciplinas', 'DisciplinaController').validator(
   new Map([[['disciplinas.store'], ['StoreDiscplina']]]),
 )
 
-Route.resource('cursos', 'CursoController')
+Route.resource('cursos', 'CursoController').validator(
+  new Map([[['cursos.store'], ['StoreCurso']]]),
+)
