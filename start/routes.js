@@ -17,6 +17,7 @@
 const Route = use('Route')
 
 Route.on('/').render('welcome')
+
 Route.resource('ppcs', 'PpcController').validator(
   new Map([[['ppcs.store'], ['StorePpc']]]),
 )
@@ -27,4 +28,8 @@ Route.resource('disciplinas', 'DisciplinaController').validator(
 
 Route.resource('cursos', 'CursoController').validator(
   new Map([[['cursos.store'], ['StoreCurso']]]),
+)
+
+Route.resource('professores', 'ProfessorController').validator(
+  new Map([[['professores.store'], ['StoreProfessor']]]),
 )

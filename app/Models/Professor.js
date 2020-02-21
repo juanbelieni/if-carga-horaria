@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class Professor extends Model {
+  cargas() {
+    return this.hasMany('App/Models/Carga')
+  }
+
   static get table() {
     return 'professores'
   }
