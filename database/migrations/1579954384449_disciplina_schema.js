@@ -10,7 +10,7 @@ class DisciplinaSchema extends Schema {
       table.string('nome').notNullable()
       table.integer('periodo').unsigned().notNullable()
       table.integer('duracao_aula').unsigned().notNullable()
-      table.integer('aula_semana').unsigned().notNullable()
+      table.integer('aulas_semana').unsigned().notNullable()
       table.integer('ppc_id').unsigned().references('id').inTable('ppcs')
         .notNullable()
         .onDelete('CASCADE')

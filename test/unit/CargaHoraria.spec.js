@@ -43,7 +43,7 @@ test('calculate the year and semester of an annual subject', async ({
     nome: 'Banco de Dados',
     periodo: 2,
     duracao_aula: 45,
-    aula_semana: 2,
+    aulas_semana: 2,
     ppc_id: ppc.id,
   })
 
@@ -82,7 +82,7 @@ test('calculate the year and semester of a semi-annual subject', async ({
     nome: 'Tecnologia de Alimentos',
     periodo: 3,
     duracao_aula: 45,
-    aula_semana: 2,
+    aulas_semana: 2,
     ppc_id: ppc.id,
   })
 
@@ -126,7 +126,7 @@ test('show correct name of a annual course', async ({ assert }) => {
     nome: 'Empreendedorismo',
     periodo: 3,
     duracao_aula: 45,
-    aula_semana: 2,
+    aulas_semana: 2,
     ppc_id: ppc.id,
   })
 
@@ -162,7 +162,7 @@ test('show correct name of a semi-annual course', async ({ assert }) => {
     nome: 'Empreendedorismo',
     periodo: 3,
     duracao_aula: 45,
-    aula_semana: 2,
+    aulas_semana: 2,
     ppc_id: ppc.id,
   })
 
