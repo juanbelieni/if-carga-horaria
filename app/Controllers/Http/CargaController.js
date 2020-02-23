@@ -4,6 +4,11 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
+const Carga = use('App/Models/Carga')
+
+const Database = use('Database')
+
 /**
  * Resourceful controller for interacting with cargas
  */
@@ -17,7 +22,8 @@ class CargaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, view }) {
+    return Database.table('cargas_horarias').select('*')
   }
 
   /**
@@ -29,7 +35,7 @@ class CargaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create({ request, response, view }) {
   }
 
   /**
@@ -40,7 +46,10 @@ class CargaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
+    const data = request.only(['curso_id', 'professor_id', 'disciplina_id'])
+
+    return Carga.create(data)
   }
 
   /**
@@ -52,7 +61,11 @@ class CargaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({
+    params, request, response, view,
+  }) {
+    const { id } = params
+    return Database.table('cargas_horarias').where({ id }).first()
   }
 
   /**
@@ -64,7 +77,9 @@ class CargaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async edit({
+    params, request, response, view,
+  }) {
   }
 
   /**
@@ -75,7 +90,19 @@ class CargaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
+    const { id } = params
+    const data = request.only(['curso_id', 'professor_id', 'disciplina_id'])
+    const carga = await Carga.find(id)
+
+    if (carga === null) {
+      return response.status(404).send()
+    }
+
+    carga.merge(data)
+    await carga.save()
+
+    return carga
   }
 
   /**
@@ -86,7 +113,17 @@ class CargaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
+    const { id } = params
+
+    const carga = await Carga.find(id)
+
+    if (carga === null) {
+      return response.status(404).send()
+    }
+
+    await carga.delete()
+    return response.status(200).send()
   }
 }
 
