@@ -1,6 +1,6 @@
 'use strict'
 
-const { test, before } = use('Test/Suite')('Carga Horária')
+const { test } = use('Test/Suite')('Carga Horária')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Ppc = use('App/Models/Ppc')
@@ -8,20 +8,15 @@ const Ppc = use('App/Models/Ppc')
 const Curso = use('App/Models/Curso')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Disciplina = use('App/Models/Disciplina')
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Professor = use('App/Models/Professor')
+// /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
+// const Professor = use('App/Models/Professor')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Carga = use('App/Models/Carga')
 
-const Database = use('Database')
+/** @type {import('@adonisjs/lucid/src/Factory')} */
+const Factory = use('Factory')
 
-before(async () => {
-  await Professor.create({
-    id: 1,
-    nome: 'João',
-    siape: 123,
-  })
-})
+const Database = use('Database')
 
 test('calculate the year and semester of an annual subject', async ({
   assert,
@@ -47,7 +42,7 @@ test('calculate the year and semester of an annual subject', async ({
     ppc_id: ppc.id,
   })
 
-  const professor = await Professor.find(1)
+  const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
     curso_id: curso.id,
@@ -86,7 +81,7 @@ test('calculate the year and semester of a semi-annual subject', async ({
     ppc_id: ppc.id,
   })
 
-  const professor = await Professor.find(1)
+  const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
     curso_id: curso.id,
@@ -130,7 +125,7 @@ test('show correct name of a annual course', async ({ assert }) => {
     ppc_id: ppc.id,
   })
 
-  const professor = await Professor.find(1)
+  const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
     curso_id: curso.id,
@@ -166,7 +161,7 @@ test('show correct name of a semi-annual course', async ({ assert }) => {
     ppc_id: ppc.id,
   })
 
-  const professor = await Professor.find(1)
+  const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
     curso_id: curso.id,
