@@ -37,3 +37,8 @@ Route.resource('professores', 'ProfessorController').validator(
 Route.resource('cargas', 'CargaController').validator(
   new Map([[['cargas.store'], ['StoreCarga']]]),
 )
+
+Route.group(() => {
+  Route.get('professores', 'RelatorioController.professores')
+  Route.get('cursos', 'RelatorioController.cursos')
+}).prefix('/relatorios')
