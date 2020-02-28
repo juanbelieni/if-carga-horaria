@@ -12,8 +12,8 @@ const Disciplina = use('App/Models/Disciplina')
 const Professor = use('App/Models/Professor')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Carga = use('App/Models/Carga')
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const CargaHoraria = use('App/Models/CargaHoraria')
+
+const Database = use('Database')
 
 before(async () => {
   await Professor.create({
@@ -55,7 +55,7 @@ test('calculate the year and semester of an annual subject', async ({
     disciplina_id: disciplina.id,
   })
 
-  const cargaHoraria = await CargaHoraria.find(carga.id)
+  const cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
   assert.equal(cargaHoraria.ano, 2020)
   assert.isNull(cargaHoraria.semestre)
@@ -94,14 +94,14 @@ test('calculate the year and semester of a semi-annual subject', async ({
     disciplina_id: disciplina.id,
   })
 
-  const cargaHoraria = await CargaHoraria.find(carga.id)
+  let cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
   assert.equal(cargaHoraria.ano, 2021)
   assert.equal(cargaHoraria.semestre, 1)
 
   curso.merge({ semestre_ingresso: 2 })
   await curso.save()
-  await cargaHoraria.reload()
+  cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
   assert.equal(cargaHoraria.ano, 2021)
   assert.equal(cargaHoraria.semestre, 2)
@@ -138,7 +138,7 @@ test('show correct name of a annual course', async ({ assert }) => {
     disciplina_id: disciplina.id,
   })
 
-  const cargaHoraria = await CargaHoraria.find(carga.id)
+  const cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
   assert.equal(cargaHoraria.curso, 'Técnico em Administração Subsequente - 2020')
 })
@@ -174,7 +174,7 @@ test('show correct name of a semi-annual course', async ({ assert }) => {
     disciplina_id: disciplina.id,
   })
 
-  const cargaHoraria = await CargaHoraria.find(carga.id)
+  const cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
   assert.equal(cargaHoraria.curso, 'Técnico em Administração Subsequente - 2020/1')
 })
