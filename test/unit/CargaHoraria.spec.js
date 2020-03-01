@@ -6,8 +6,8 @@ const { test } = use('Test/Suite')('Carga Horária')
 const Ppc = use('App/Models/Ppc')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Curso = use('App/Models/Curso')
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Disciplina = use('App/Models/Disciplina')
+// /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
+// const Disciplina = use('App/Models/Disciplina')
 // /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 // const Professor = use('App/Models/Professor')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
@@ -34,13 +34,11 @@ test('calculate the year and semester of an annual subject', async ({
     ppc_id: ppc.id,
   })
 
-  const disciplina = await Disciplina.create({
-    nome: 'Banco de Dados',
-    periodo: 2,
-    duracao_aula: 45,
-    aulas_semana: 2,
-    ppc_id: ppc.id,
-  })
+  const disciplina = await Factory.model('App/Models/Disciplina')
+    .create({
+      periodo: 2,
+      ppc_id: ppc.id,
+    })
 
   const professor = await Factory.model('App/Models/Professor').create()
 
@@ -73,13 +71,11 @@ test('calculate the year and semester of a semi-annual subject', async ({
     ppc_id: ppc.id,
   })
 
-  const disciplina = await Disciplina.create({
-    nome: 'Tecnologia de Alimentos',
-    periodo: 3,
-    duracao_aula: 45,
-    aulas_semana: 2,
-    ppc_id: ppc.id,
-  })
+  const disciplina = await Factory.model('App/Models/Disciplina')
+    .create({
+      periodo: 3,
+      ppc_id: ppc.id,
+    })
 
   const professor = await Factory.model('App/Models/Professor').create()
 
@@ -117,13 +113,11 @@ test('show correct name of a annual course', async ({ assert }) => {
     ppc_id: ppc.id,
   })
 
-  const disciplina = await Disciplina.create({
-    nome: 'Empreendedorismo',
-    periodo: 3,
-    duracao_aula: 45,
-    aulas_semana: 2,
-    ppc_id: ppc.id,
-  })
+  const disciplina = await Factory.model('App/Models/Disciplina')
+    .create({
+      periodo: 3,
+      ppc_id: ppc.id,
+    })
 
   const professor = await Factory.model('App/Models/Professor').create()
 
@@ -153,13 +147,11 @@ test('show correct name of a semi-annual course', async ({ assert }) => {
     ppc_id: ppc.id,
   })
 
-  const disciplina = await Disciplina.create({
-    nome: 'Empreendedorismo',
-    periodo: 3,
-    duracao_aula: 45,
-    aulas_semana: 2,
-    ppc_id: ppc.id,
-  })
+  const disciplina = await Factory.model('App/Models/Disciplina')
+    .create({
+      periodo: 3,
+      ppc_id: ppc.id,
+    })
 
   const professor = await Factory.model('App/Models/Professor').create()
 
