@@ -67,13 +67,13 @@ test('calculate the year and semester of a semi-annual subject', async ({
 
   const curso = await Curso.create({
     ano_ingresso: 2020,
-    semestre_ingresso: 1,
+    semestre_ingresso: 2,
     ppc_id: ppc.id,
   })
 
   const disciplina = await Factory.model('App/Models/Disciplina')
     .create({
-      periodo: 3,
+      periodo: 2,
       ppc_id: ppc.id,
     })
 
@@ -90,8 +90,8 @@ test('calculate the year and semester of a semi-annual subject', async ({
   assert.equal(cargaHoraria.ano, 2021)
   assert.equal(cargaHoraria.semestre, 1)
 
-  curso.merge({ semestre_ingresso: 2 })
-  await curso.save()
+  disciplina.merge({ periodo: 3 })
+  await disciplina.save()
   cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
   assert.equal(cargaHoraria.ano, 2021)
