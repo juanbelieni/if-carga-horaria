@@ -7,8 +7,8 @@ class PpcSchema extends Schema {
   up() {
     this.create('ppcs', (table) => {
       table.increments()
-      table.string('nome').notNullable()
-      table.string('formacao').notNullable()
+      table.string('nome').notNullable().collate('utf8_unicode_ci')
+      table.string('formacao').notNullable().collate('utf8_unicode_ci')
       table.integer('duracao').unsigned().notNullable()
       table.integer('ano').unsigned().notNullable()
       table.boolean('semestral').notNullable()

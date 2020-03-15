@@ -7,7 +7,7 @@ class ProfessorSchema extends Schema {
   up() {
     this.create('professores', (table) => {
       table.increments()
-      table.string('nome').notNullable()
+      table.string('nome').notNullable().collate('utf8_unicode_ci')
       table.bigInteger('siape').notNullable()
       table.timestamps()
     })

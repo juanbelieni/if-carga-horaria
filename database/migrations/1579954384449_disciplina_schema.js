@@ -7,7 +7,7 @@ class DisciplinaSchema extends Schema {
   up() {
     this.create('disciplinas', (table) => {
       table.increments()
-      table.string('nome').notNullable()
+      table.string('nome').notNullable().collate('utf8_unicode_ci')
       table.integer('periodo').unsigned().notNullable()
       table.integer('duracao_aula').unsigned().notNullable()
       table.integer('aulas_semana').unsigned().notNullable()
