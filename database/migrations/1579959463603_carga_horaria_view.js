@@ -20,6 +20,8 @@ class CargaHorariaSchema extends Schema {
         + 'aulas_semana, '
         + 'duracao_aula, '
         + 'duracao_aula * aulas_semana as carga_horaria, '
+        // Simulado
+        + 'simulado, '
         // Ids
         + 'curso_id, '
         + 'professor_id, '
