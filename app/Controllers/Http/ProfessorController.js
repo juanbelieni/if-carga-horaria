@@ -18,7 +18,20 @@ class ProfessorController {
    * @param {View} ctx.view
    */
   async index({ request, response, view }) {
-    return Professor.all()
+    const {
+      page, perPage, nome, siape,
+    } = request.only(['page', 'perPage', 'nome', 'siape'])
+
+    return Professor
+      .query()
+      .where((query) => {
+        if (nome) {
+          query.where('nome', 'like', `%${nome}%`)
+        } if (siape) {
+          query.where('siape', 'like', `%${siape}%`)
+        }
+      })
+      .paginate(page, perPage)
   }
 
   /**

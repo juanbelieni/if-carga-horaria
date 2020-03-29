@@ -21,7 +21,39 @@ class CursoController {
    * @param {View} ctx.view
    */
   async index({ request, response, view }) {
-    return Curso.all()
+    const {
+      page, perPage, semestre_ingresso, ano_ingresso,
+    } = request.only(['page', 'perPage', 'semestre_ingresso', 'ano_ingresso'])
+
+    return Curso
+      .query()
+      .with('ppc')
+      .where((query) => {
+        if (semestre_ingresso) {
+          query
+            .whereIn('semestre_ingresso', semestre_ingresso)
+            .orWhere((or) => {
+              if (semestre_ingresso.includes('0')) {
+                or.whereNull('semestre_ingresso')
+              }
+            })
+        } if (ano_ingresso) {
+          console.log(ano_ingresso, 1)
+          query.where('ano_ingresso', 'like', `%${ano_ingresso}%`)
+        }
+      })
+      .orWhere((query) => {
+        if (semestre_ingresso) {
+          if (semestre_ingresso.includes('0')) {
+            query.whereNull('semestre_ingresso')
+          }
+        } if (ano_ingresso) {
+          console.log(ano_ingresso, 2)
+          query.where('ano_ingresso', 'like', `%${ano_ingresso}%`)
+        }
+      })
+      .orderByRaw('ano_ingresso, semestre_ingresso')
+      .paginate(page, perPage)
   }
 
   /**
@@ -36,7 +68,7 @@ class CursoController {
   async create({ request, response, view }) {}
 
   /**
-   * Create/save a new curso.
+   * Create/sarve a new curso.
    * POST cursos
    *
    * @param {object} ctx

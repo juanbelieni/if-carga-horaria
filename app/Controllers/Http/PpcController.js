@@ -20,7 +20,22 @@ class PpcController {
    * @param {View} ctx.view
    */
   async index({ request, response, view }) {
-    return Ppc.all()
+    const {
+      page, perPage, formacao, semestral, ano,
+    } = request.only(['page', 'perPage', 'formacao', 'semestral', 'ano'])
+
+    return Ppc
+      .query()
+      .where((query) => {
+        if (formacao) {
+          query.whereIn('formacao', formacao)
+        } if (semestral) {
+          query.whereIn('semestral', semestral)
+        } if (ano) {
+          query.where('ano', 'like', `%${ano}%`)
+        }
+      })
+      .paginate(page, perPage)
   }
 
   /**
