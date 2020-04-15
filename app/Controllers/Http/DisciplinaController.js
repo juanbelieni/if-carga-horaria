@@ -21,7 +21,21 @@ class DisciplinaController {
    * @param {View} ctx.view
    */
   async index({ request, response, view }) {
-    return Disciplina.all()
+    const {
+      periodo, ppc_id, page, perPage,
+    } = request.only(['periodo', 'ppc_id', 'page', 'perPage'])
+
+    return Disciplina
+      .query()
+      .where((query) => {
+        if (periodo) {
+          query.where('periodo', periodo)
+        } if (ppc_id) {
+          query.where('ppc_id', ppc_id)
+        }
+      })
+      .orderByRaw('ppc_id, periodo, nome')
+      .paginate(page, perPage)
   }
 
   /**
@@ -45,7 +59,7 @@ class DisciplinaController {
    * @param {Response} ctx.response
    */
   async store({ request, response }) {
-    const data = request.only(['nome', 'periodo', 'duracao_aula', 'aula_semana', 'ppc_id'])
+    const data = request.only(['nome', 'periodo', 'duracao_aula', 'aulas_semana', 'ppc_id'])
 
     return Disciplina.create(data)
   }
@@ -90,7 +104,7 @@ class DisciplinaController {
    */
   async update({ params, request, response }) {
     const { id } = params
-    const data = request.only(['nome', 'periodo', 'duracao_aula', 'aula_semana', 'ppc_id'])
+    const data = request.only(['nome', 'periodo', 'duracao_aula', 'aulas_semana', 'ppc_id'])
     const disciplina = await Disciplina.find(id)
 
     if (disciplina === null) {
