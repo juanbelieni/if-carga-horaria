@@ -15,7 +15,7 @@ class CargaHorariaSchema extends Schema {
         // Disciplina
         + 'd.nome as disciplina, '
         + 'if(semestral, ano_ingresso + (periodo + semestre_ingresso - 2) DIV 2, ano_ingresso + periodo - 1) as ano, '
-        + 'if(semestral, (semestre_ingresso + periodo % 2) % 2 + 1, null) as semestre, '
+        + 'if(semestral, (semestre_ingresso + periodo % 2) % 2 + 1, 0) as semestre, '
         + 'periodo, '
         + 'aulas_semana, '
         + 'duracao_aula, '

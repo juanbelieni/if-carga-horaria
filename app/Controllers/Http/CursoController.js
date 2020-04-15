@@ -32,23 +32,7 @@ class CursoController {
         if (semestre_ingresso) {
           query
             .whereIn('semestre_ingresso', semestre_ingresso)
-            .orWhere((or) => {
-              if (semestre_ingresso.includes('0')) {
-                or.whereNull('semestre_ingresso')
-              }
-            })
         } if (ano_ingresso) {
-          console.log(ano_ingresso, 1)
-          query.where('ano_ingresso', 'like', `%${ano_ingresso}%`)
-        }
-      })
-      .orWhere((query) => {
-        if (semestre_ingresso) {
-          if (semestre_ingresso.includes('0')) {
-            query.whereNull('semestre_ingresso')
-          }
-        } if (ano_ingresso) {
-          console.log(ano_ingresso, 2)
           query.where('ano_ingresso', 'like', `%${ano_ingresso}%`)
         }
       })
