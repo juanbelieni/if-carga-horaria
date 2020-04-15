@@ -9,11 +9,20 @@ class StoreCurso {
     }
   }
 
-  async fails(errorMessages) {
-    this.ctx.session
-      .withErrors(errorMessages)
+  get sanitizationRules() {
+    return {
+      ano_ingresso: 'to_int',
+      semestre_ingresso: 'to_int',
+      ppc_id: 'to_int',
+    }
+  }
 
-    return this.ctx.response.redirect('back')
+  get validateAll() {
+    return true
+  }
+
+  async fails(errorMessages) {
+    return this.ctx.response.status(400).send(errorMessages)
   }
 
   get messages() {

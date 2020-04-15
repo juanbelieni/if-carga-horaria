@@ -9,11 +9,20 @@ class StoreCarga {
     }
   }
 
-  async fails(errorMessages) {
-    this.ctx.session
-      .withErrors(errorMessages)
+  get sanitizationRules() {
+    return {
+      curso_id: 'to_int',
+      professor_id: 'to_int',
+      disciplina_id: 'to_int',
+    }
+  }
 
-    return this.ctx.response.redirect('back')
+  get validateAll() {
+    return true
+  }
+
+  async fails(errorMessages) {
+    return this.ctx.response.status(400).send(errorMessages)
   }
 
   get messages() {

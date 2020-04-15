@@ -6,16 +6,26 @@ class StoreDisciplina {
       nome: 'required',
       periodo: 'required',
       duracao_aula: 'required',
-      aula_semana: 'required',
+      aulas_semana: 'required',
       ppc_id: 'required|exists:ppcs,id',
     }
   }
 
-  async fails(errorMessages) {
-    this.ctx.session
-      .withErrors(errorMessages)
+  get sanitizationRules() {
+    return {
+      periodo: 'to_int',
+      duracao_aula: 'to_int',
+      aulas_semana: 'to_int',
+      ppc_id: 'to_int',
+    }
+  }
 
-    return this.ctx.response.redirect('back')
+  get validateAll() {
+    return true
+  }
+
+  async fails(errorMessages) {
+    return this.ctx.response.status(400).send(errorMessages)
   }
 
   get messages() {
