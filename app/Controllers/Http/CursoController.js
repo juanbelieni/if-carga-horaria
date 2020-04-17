@@ -7,6 +7,8 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Curso = use('App/Models/Curso')
 
+const Database = use('Database')
+
 /**
  * Resourceful controller for interacting with cursos
  */
@@ -20,14 +22,14 @@ class CursoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response, view }) {
+  async index({ request }) {
     const {
       page, perPage, semestre_ingresso, ano_ingresso,
     } = request.only(['page', 'perPage', 'semestre_ingresso', 'ano_ingresso'])
 
-    return Curso
-      .query()
-      .with('ppc')
+    return Database
+      .table('cursos')
+      .select('cursos.*', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
       .where((query) => {
         if (semestre_ingresso) {
           query
@@ -36,7 +38,7 @@ class CursoController {
           query.where('ano_ingresso', 'like', `%${ano_ingresso}%`)
         }
       })
-      .orderByRaw('ano_ingresso, semestre_ingresso')
+      .join('ppcs', 'ppcs.id', 'ppc_id')
       .paginate(page, perPage)
   }
 
@@ -74,11 +76,15 @@ class CursoController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({
-    params, request, response, view,
-  }) {
+  async show({ params }) {
     const { id } = params
-    return Curso.find(id)
+
+    return Database
+      .table('cursos')
+      .select('cursos.*', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
+      .join('ppcs', 'ppcs.id', 'ppc_id')
+      .where('cursos.id', id)
+      .first()
   }
 
   /**
