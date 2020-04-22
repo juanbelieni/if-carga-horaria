@@ -22,8 +22,20 @@ class CargaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response, view }) {
-    return Database.table('cargas_horarias').select('*')
+  async index({ request }) {
+    const { curso_id, disciplina_id, periodo } = request.only(['curso_id', 'disciplina_id', 'periodo'])
+
+    return Database
+      .table('cargas_horarias')
+      .where((query) => {
+        if (curso_id) {
+          query.where('curso_id', curso_id)
+        } if (periodo) {
+          query.where('periodo', periodo)
+        } if (disciplina_id) {
+          query.where('disciplina_id', disciplina_id)
+        }
+      }).select('*')
   }
 
   /**
@@ -46,10 +58,15 @@ class CargaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
-    const data = request.only(['curso_id', 'professor_id', 'disciplina_id'])
+  async store({ request }) {
+    const { curso_id, professor_id, disciplina_id } = request.only(['curso_id', 'professor_id', 'disciplina_id'])
 
-    return Carga.create(data)
+    const carga = await Carga.findOrNew({ curso_id, disciplina_id })
+    carga.professor_id = professor_id
+
+    return carga.save()
+
+    // return Carga.create(data)
   }
 
   /**

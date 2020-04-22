@@ -29,7 +29,7 @@ class CursoController {
 
     return Database
       .table('cursos')
-      .select('cursos.*', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
+      .select('cursos.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
       .where((query) => {
         if (semestre_ingresso) {
           query
@@ -81,7 +81,7 @@ class CursoController {
 
     return Database
       .table('cursos')
-      .select('cursos.*', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
+      .select('cursos.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
       .join('ppcs', 'ppcs.id', 'ppc_id')
       .where('cursos.id', id)
       .first()

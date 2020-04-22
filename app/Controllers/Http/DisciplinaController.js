@@ -20,12 +20,12 @@ class DisciplinaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response, view }) {
+  async index({ request }) {
     const {
       periodo, ppc_id, page, perPage,
     } = request.only(['periodo', 'ppc_id', 'page', 'perPage'])
 
-    return Disciplina
+    const q = Disciplina
       .query()
       .where((query) => {
         if (periodo) {
@@ -35,7 +35,8 @@ class DisciplinaController {
         }
       })
       .orderByRaw('ppc_id, periodo, nome')
-      .paginate(page, perPage)
+
+    return (page && perPage) ? q.paginate(page, perPage) : q.fetch()
   }
 
   /**
