@@ -23,14 +23,13 @@ class CargaHorariaSchema extends Schema {
         // Simulado
         + 'simulado, '
         // Ids
-        + 'curso_id, '
-        + 'professor_id, '
-        + 'disciplina_id '
-        + 'from cargas as c inner join disciplinas as d on c.disciplina_id = d.id '
-        + 'inner join cursos on cursos.id = c.curso_id '
-        + 'inner join ppcs on ppcs.id = cursos.ppc_id '
-        + 'inner join professores on professores.id = c.professor_id '
-        + 'order by c.id',
+        + 'cursos.id as curso_id, '
+        + 'professores.id as professor_id, '
+        + 'd.id as disciplina_id '
+        + 'from cursos inner join ppcs on cursos.ppc_id = ppcs.id '
+        + 'inner join disciplinas as d on d.ppc_id = ppcs.id '
+        + 'left outer join cargas as c on c.disciplina_id = d.id '
+        + 'left outer join professores on professores.id = c.professor_id',
     )
   }
 

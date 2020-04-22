@@ -5,7 +5,7 @@ class StoreCarga {
     return {
       curso_id: 'required|exists:cursos,id',
       professor_id: 'required|exists:professores,id',
-      disciplina_id: 'required|exists:disciplina,id',
+      disciplina_id: 'required|exists:disciplinas,id',
     }
   }
 
