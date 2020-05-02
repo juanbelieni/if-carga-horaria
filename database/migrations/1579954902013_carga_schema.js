@@ -7,7 +7,7 @@ class CargaSchema extends Schema {
   up() {
     this.create('cargas', (table) => {
       table.increments()
-      table.integer('curso_id').unsigned().references('id').inTable('cursos')
+      table.integer('turma_id').unsigned().references('id').inTable('turmas')
         .notNullable()
         .onDelete('CASCADE')
       table.integer('disciplina_id').unsigned().references('id').inTable('disciplinas')

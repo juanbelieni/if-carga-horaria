@@ -23,13 +23,13 @@ class CargaController {
    * @param {View} ctx.view
    */
   async index({ request }) {
-    const { curso_id, disciplina_id, periodo } = request.only(['curso_id', 'disciplina_id', 'periodo'])
+    const { turma_id, disciplina_id, periodo } = request.only(['turma_id', 'disciplina_id', 'periodo'])
 
     return Database
       .table('cargas_horarias')
       .where((query) => {
-        if (curso_id) {
-          query.where('curso_id', curso_id)
+        if (turma_id) {
+          query.where('turma_id', turma_id)
         } if (periodo) {
           query.where('periodo', periodo)
         } if (disciplina_id) {
@@ -59,9 +59,9 @@ class CargaController {
    * @param {Response} ctx.response
    */
   async store({ request }) {
-    const { curso_id, professor_id, disciplina_id } = request.only(['curso_id', 'professor_id', 'disciplina_id'])
+    const { turma_id, professor_id, disciplina_id } = request.only(['turma_id', 'professor_id', 'disciplina_id'])
 
-    const carga = await Carga.findOrNew({ curso_id, disciplina_id })
+    const carga = await Carga.findOrNew({ turma_id, disciplina_id })
     carga.professor_id = professor_id
 
     return carga.save()
@@ -109,7 +109,7 @@ class CargaController {
    */
   async update({ params, request, response }) {
     const { id } = params
-    const data = request.only(['curso_id', 'professor_id', 'disciplina_id'])
+    const data = request.only(['turma_id', 'professor_id', 'disciplina_id'])
     const carga = await Carga.find(id)
 
     if (carga === null) {

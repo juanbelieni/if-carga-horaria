@@ -5,7 +5,7 @@ const { test } = use('Test/Suite')('Carga Horária')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Ppc = use('App/Models/Ppc')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Curso = use('App/Models/Curso')
+const Turma = use('App/Models/Turma')
 // /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 // const Disciplina = use('App/Models/Disciplina')
 // /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
@@ -18,7 +18,7 @@ const Factory = use('Factory')
 
 const Database = use('Database')
 
-test('calculate the year and semester of an annual subject', async ({
+test('calculate the year and semester of an annual "disciplina"', async ({
   assert,
 }) => {
   const ppc = await Ppc.create({
@@ -29,7 +29,7 @@ test('calculate the year and semester of an annual subject', async ({
     semestral: false,
   })
 
-  const curso = await Curso.create({
+  const turma = await Turma.create({
     ano_ingresso: 2019,
     ppc_id: ppc.id,
   })
@@ -43,7 +43,7 @@ test('calculate the year and semester of an annual subject', async ({
   const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
-    curso_id: curso.id,
+    turma_id: turma.id,
     professor_id: professor.id,
     disciplina_id: disciplina.id,
   })
@@ -51,10 +51,10 @@ test('calculate the year and semester of an annual subject', async ({
   const cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
   assert.equal(cargaHoraria.ano, 2020)
-  assert.isNull(cargaHoraria.semestre)
+  assert.equal(cargaHoraria.semestre, 0)
 })
 
-test('calculate the year and semester of a semi-annual subject', async ({
+test('calculate the year and semester of a semi-annual "disciplina"', async ({
   assert,
 }) => {
   const ppc = await Ppc.create({
@@ -65,7 +65,7 @@ test('calculate the year and semester of a semi-annual subject', async ({
     semestral: true,
   })
 
-  const curso = await Curso.create({
+  const turma = await Turma.create({
     ano_ingresso: 2020,
     semestre_ingresso: 2,
     ppc_id: ppc.id,
@@ -80,7 +80,7 @@ test('calculate the year and semester of a semi-annual subject', async ({
   const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
-    curso_id: curso.id,
+    turma_id: turma.id,
     professor_id: professor.id,
     disciplina_id: disciplina.id,
   })
@@ -98,7 +98,7 @@ test('calculate the year and semester of a semi-annual subject', async ({
   assert.equal(cargaHoraria.semestre, 2)
 })
 
-test('show correct name of a annual course', async ({ assert }) => {
+test('show correct name of a annual "turma"', async ({ assert }) => {
   const ppc = await Ppc.create({
     nome: 'Técnico em Administração',
     formacao: 'Subsequente',
@@ -107,7 +107,7 @@ test('show correct name of a annual course', async ({ assert }) => {
     semestral: false,
   })
 
-  const curso = await Curso.create({
+  const turma = await Turma.create({
     ano_ingresso: 2020,
     semestre_ingresso: 1,
     ppc_id: ppc.id,
@@ -122,17 +122,17 @@ test('show correct name of a annual course', async ({ assert }) => {
   const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
-    curso_id: curso.id,
+    turma_id: turma.id,
     professor_id: professor.id,
     disciplina_id: disciplina.id,
   })
 
   const cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
-  assert.equal(cargaHoraria.curso, 'Técnico em Administração Subsequente - 2020')
+  assert.equal(cargaHoraria.turma, 'Técnico em Administração Subsequente - 2020')
 })
 
-test('show correct name of a semi-annual course', async ({ assert }) => {
+test('show correct name of a semi-annual "turma"', async ({ assert }) => {
   const ppc = await Ppc.create({
     nome: 'Técnico em Administração',
     formacao: 'Subsequente',
@@ -141,7 +141,7 @@ test('show correct name of a semi-annual course', async ({ assert }) => {
     semestral: true,
   })
 
-  const curso = await Curso.create({
+  const turma = await Turma.create({
     ano_ingresso: 2020,
     semestre_ingresso: 1,
     ppc_id: ppc.id,
@@ -156,12 +156,12 @@ test('show correct name of a semi-annual course', async ({ assert }) => {
   const professor = await Factory.model('App/Models/Professor').create()
 
   const carga = await Carga.create({
-    curso_id: curso.id,
+    turma_id: turma.id,
     professor_id: professor.id,
     disciplina_id: disciplina.id,
   })
 
   const cargaHoraria = await Database.table('cargas_horarias').where({ id: carga.id }).first()
 
-  assert.equal(cargaHoraria.curso, 'Técnico em Administração Subsequente - 2020/1')
+  assert.equal(cargaHoraria.turma, 'Técnico em Administração Subsequente - 2020/1')
 })

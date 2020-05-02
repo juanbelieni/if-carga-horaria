@@ -8,8 +8,8 @@ class CargaHorariaSchema extends Schema {
     this.raw(
       'create view cargas_horarias as select '
         + 'c.id, '
-        // Curso
-        + 'concat(ppcs.nome, " ", ppcs.formacao, " - ", if(semestral, concat(ano_ingresso, "/", semestre_ingresso), ano_ingresso)) as curso, '
+        // Turma
+        + 'concat(ppcs.nome, " ", ppcs.formacao, " - ", if(semestral, concat(ano_ingresso, "/", semestre_ingresso), ano_ingresso)) as turma, '
         // Professor
         + 'professores.nome as professor, '
         // Disciplina
@@ -23,12 +23,12 @@ class CargaHorariaSchema extends Schema {
         // Simulado
         + 'simulado, '
         // Ids
-        + 'cursos.id as curso_id, '
+        + 'turmas.id as turma_id, '
         + 'professores.id as professor_id, '
         + 'd.id as disciplina_id '
-        + 'from cursos inner join ppcs on cursos.ppc_id = ppcs.id '
+        + 'from turmas inner join ppcs on turmas.ppc_id = ppcs.id '
         + 'inner join disciplinas as d on d.ppc_id = ppcs.id '
-        + 'left outer join cargas as c on c.disciplina_id = d.id '
+        + 'left outer join cargas as c on c.disciplina_id = d.id and c.turma_id = turmas.id '
         + 'left outer join professores on professores.id = c.professor_id',
     )
   }

@@ -3,7 +3,7 @@
 class StoreCarga {
   get rules() {
     return {
-      curso_id: 'required|exists:cursos,id',
+      turma_id: 'required|exists:turmas,id',
       professor_id: 'required|exists:professores,id',
       disciplina_id: 'required|exists:disciplinas,id',
     }
@@ -11,7 +11,7 @@ class StoreCarga {
 
   get sanitizationRules() {
     return {
-      curso_id: 'to_int',
+      turma_id: 'to_int',
       professor_id: 'to_int',
       disciplina_id: 'to_int',
     }
@@ -27,8 +27,8 @@ class StoreCarga {
 
   get messages() {
     return {
-      'curso_id.required': 'Esse campo é obrigatório',
-      'curso_id.exists': 'Esse curso não existe no banco de dados',
+      'turma_id.required': 'Esse campo é obrigatório',
+      'turma_id.exists': 'Esse turma não existe no banco de dados',
       'professor_id.required': 'Esse campo é obrigatório',
       'professor_id.exists': 'Esse(a) professor(a) não existe no banco de dados',
       'disciplina_id.required': 'Esse campo é obrigatório',

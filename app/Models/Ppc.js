@@ -4,8 +4,8 @@
 const Model = use('Model')
 
 class Ppc extends Model {
-  cursos() {
-    return this.hasMany('App/Models/Curso')
+  turmas() {
+    return this.hasMany('App/Models/Turma')
   }
 
   disciplinas() {

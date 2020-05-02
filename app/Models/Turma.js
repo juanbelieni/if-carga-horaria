@@ -3,7 +3,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
-class Curso extends Model {
+class Turma extends Model {
   ppc() {
     return this.belongsTo('App/Models/Ppc')
   }
@@ -13,4 +13,4 @@ class Curso extends Model {
   }
 }
 
-module.exports = Curso
+module.exports = Turma

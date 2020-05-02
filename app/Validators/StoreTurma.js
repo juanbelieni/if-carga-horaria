@@ -1,6 +1,6 @@
 'use strict'
 
-class StoreCurso {
+class StoreTurma {
   get rules() {
     return {
       ano_ingresso: 'required|year',
@@ -36,4 +36,4 @@ class StoreCurso {
   }
 }
 
-module.exports = StoreCurso
+module.exports = StoreTurma

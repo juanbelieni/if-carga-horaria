@@ -12,8 +12,8 @@ class Carga extends Model {
     return this.belongsTo('App/Models/Disciplina')
   }
 
-  curso() {
-    return this.belongsTo('App/Models/Curso')
+  turma() {
+    return this.belongsTo('App/Models/Turma')
   }
 }
 
