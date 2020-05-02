@@ -34,11 +34,11 @@ class RelatorioController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async cursos({ request }) {
+  async turmas({ request }) {
     const { id } = request.only(['id'])
 
     if (id) {
-      return Database.table('cargas_horarias').select('*').orderBy('periodo').where('curso_id', id)
+      return Database.table('cargas_horarias').select('*').orderBy('periodo').where('turma_id', id)
     }
 
     return []

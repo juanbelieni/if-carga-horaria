@@ -26,8 +26,8 @@ Route.resource('disciplinas', 'DisciplinaController').validator(
   new Map([[['disciplinas.store'], ['StoreDisciplina']]]),
 )
 
-Route.resource('cursos', 'CursoController').validator(
-  new Map([[['cursos.store'], ['StoreCurso']]]),
+Route.resource('turmas', 'TurmaController').validator(
+  new Map([[['turmas.store'], ['StoreTurma']]]),
 )
 
 Route.resource('professores', 'ProfessorController').validator(
@@ -40,5 +40,5 @@ Route.resource('cargas', 'CargaController').validator(
 
 Route.group(() => {
   Route.get('professores', 'RelatorioController.professores')
-  Route.get('cursos', 'RelatorioController.cursos')
+  Route.get('turmas', 'RelatorioController.turmas')
 }).prefix('/relatorios')

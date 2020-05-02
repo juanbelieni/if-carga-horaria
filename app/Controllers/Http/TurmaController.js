@@ -5,17 +5,17 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Curso = use('App/Models/Curso')
+const Turma = use('App/Models/Turma')
 
 const Database = use('Database')
 
 /**
- * Resourceful controller for interacting with cursos
+ * Resourceful controller for interacting with turmas
  */
-class CursoController {
+class TurmaController {
   /**
-   * Show a list of all cursos.
-   * GET cursos
+   * Show a list of all turmas.
+   * GET turmas
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -28,8 +28,8 @@ class CursoController {
     } = request.only(['page', 'perPage', 'semestre_ingresso', 'ano_ingresso'])
 
     return Database
-      .table('cursos')
-      .select('cursos.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
+      .table('turmas')
+      .select('turmas.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
       .where((query) => {
         if (semestre_ingresso) {
           query
@@ -43,8 +43,8 @@ class CursoController {
   }
 
   /**
-   * Render a form to be used for creating a new curso.
-   * GET cursos/create
+   * Render a form to be used for creating a new turma.
+   * GET turmas/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -54,8 +54,8 @@ class CursoController {
   async create({ request, response, view }) {}
 
   /**
-   * Create/sarve a new curso.
-   * POST cursos
+   * Create/sarve a new turma.
+   * POST turmas
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -64,12 +64,12 @@ class CursoController {
   async store({ request, response }) {
     const data = request.only(['ano_ingresso', 'semestre_ingresso', 'ppc_id'])
 
-    return Curso.create(data)
+    return Turma.create(data)
   }
 
   /**
-   * Display a single curso.
-   * GET cursos/:id
+   * Display a single turma.
+   * GET turmas/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -80,16 +80,16 @@ class CursoController {
     const { id } = params
 
     return Database
-      .table('cursos')
-      .select('cursos.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
+      .table('turmas')
+      .select('turmas.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
       .join('ppcs', 'ppcs.id', 'ppc_id')
-      .where('cursos.id', id)
+      .where('turmas.id', id)
       .first()
   }
 
   /**
-   * Render a form to update an existing curso.
-   * GET cursos/:id/edit
+   * Render a form to update an existing turma.
+   * GET turmas/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -101,8 +101,8 @@ class CursoController {
   }) {}
 
   /**
-   * Update curso details.
-   * PUT or PATCH cursos/:id
+   * Update turma details.
+   * PUT or PATCH turmas/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -111,21 +111,21 @@ class CursoController {
   async update({ params, request, response }) {
     const { id } = params
     const data = request.only(['ano_ingresso', 'semestre_ingresso', 'ppc_id'])
-    const curso = await Curso.find(id)
+    const turma = await Turma.find(id)
 
-    if (curso === null) {
+    if (turma === null) {
       return response.status(404).send()
     }
 
-    curso.merge(data)
-    await curso.save()
+    turma.merge(data)
+    await turma.save()
 
-    return curso
+    return turma
   }
 
   /**
-   * Delete a curso with id.
-   * DELETE cursos/:id
+   * Delete a turma with id.
+   * DELETE turmas/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -134,15 +134,15 @@ class CursoController {
   async destroy({ params, request, response }) {
     const { id } = params
 
-    const curso = await Curso.find(id)
+    const turma = await Turma.find(id)
 
-    if (curso === null) {
+    if (turma === null) {
       return response.status(404).send()
     }
 
-    await curso.delete()
+    await turma.delete()
     return response.status(200).send()
   }
 }
 
-module.exports = CursoController
+module.exports = TurmaController
