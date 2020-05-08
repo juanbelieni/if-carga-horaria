@@ -17,15 +17,13 @@ class DisciplinaController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
   async index({ request }) {
     const {
       periodo, ppc_id, page, perPage,
     } = request.only(['periodo', 'ppc_id', 'page', 'perPage'])
 
-    const q = Disciplina
+    const data = Disciplina
       .query()
       .where((query) => {
         if (periodo) {
@@ -36,19 +34,7 @@ class DisciplinaController {
       })
       .orderByRaw('ppc_id, periodo, nome')
 
-    return (page && perPage) ? q.paginate(page, perPage) : q.fetch()
-  }
-
-  /**
-   * Render a form to be used for creating a new disciplina.
-   * GET disciplinas/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create({ request, response, view }) {
+    return (page && perPage) ? data.paginate(page, perPage) : data.fetch()
   }
 
   /**
@@ -57,9 +43,8 @@ class DisciplinaController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store({ request, response }) {
+  async store({ request }) {
     const data = request.only(['nome', 'periodo', 'duracao_aula', 'aulas_semana', 'ppc_id'])
 
     return Disciplina.create(data)
@@ -74,25 +59,9 @@ class DisciplinaController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({
-    params, request, response, view,
-  }) {
+  async show({ params }) {
     const { id } = params
     return Disciplina.find(id)
-  }
-
-  /**
-   * Render a form to update an existing disciplina.
-   * GET disciplinas/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit({
-    params, request, response, view,
-  }) {
   }
 
   /**
@@ -123,10 +92,9 @@ class DisciplinaController {
    * DELETE disciplinas/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {
+  async destroy({ params, response }) {
     const { id } = params
 
     const disciplina = await Disciplina.find(id)

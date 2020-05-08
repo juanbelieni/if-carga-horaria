@@ -9,6 +9,8 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Ppc = use('App/Models/Ppc')
 
+const Database = use('Database')
+
 class PpcController {
   /**
    * Show a list of all ppcs.
@@ -16,18 +18,19 @@ class PpcController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async index({ request, response, view }) {
+  async index({ request }) {
     const {
-      page, perPage, formacao, semestral, ano,
-    } = request.only(['page', 'perPage', 'formacao', 'semestral', 'ano'])
+      page, perPage, nome, formacao, semestral, ano,
+    } = request.only(['page', 'perPage', 'nome', 'formacao', 'semestral', 'ano'])
 
-    return Ppc
+    const data = Ppc
       .query()
+      .select('*', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
       .where((query) => {
-        if (formacao) {
+        if (nome) {
+          query.where('nome', 'like', `%${nome}%`)
+        } if (formacao) {
           query.whereIn('formacao', formacao)
         } if (semestral) {
           query.whereIn('semestral', semestral)
@@ -35,20 +38,8 @@ class PpcController {
           query.where('ano', 'like', `%${ano}%`)
         }
       })
-      .paginate(page, perPage)
-  }
 
-  /**
-   * Render a form to be used for creating a new ppc.
-   * GET ppcs/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create({ request, response, view }) {
-
+    return (page && perPage) ? data.paginate(page, perPage) : data.fetch()
   }
 
   /**
@@ -57,9 +48,8 @@ class PpcController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store({ request, response }) {
+  async store({ request }) {
     const data = request.only(['nome', 'formacao', 'duracao', 'ano', 'semestral'])
 
     return Ppc.create(data)
@@ -70,29 +60,10 @@ class PpcController {
    * GET ppcs/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show({
-    params, request, response, view,
-  }) {
+  async show({ params }) {
     const { id } = params
     return Ppc.find(id)
-  }
-
-  /**
-   * Render a form to update an existing ppc.
-   * GET ppcs/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit({
-    params, request, response, view,
-  }) {
   }
 
   /**
@@ -123,10 +94,9 @@ class PpcController {
    * DELETE ppcs/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {
+  async destroy({ params, response }) {
     const { id } = params
 
     const ppc = await Ppc.find(id)

@@ -14,15 +14,13 @@ class ProfessorController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
   async index({ request }) {
     const {
       page, perPage, nome, siape,
     } = request.only(['page', 'perPage', 'nome', 'siape'])
 
-    const q = Professor
+    const data = Professor
       .query()
       .where((query) => {
         if (nome) {
@@ -33,19 +31,7 @@ class ProfessorController {
       })
       .orderBy('nome')
 
-    return (page && perPage) ? q.paginate(page, perPage) : q.fetch()
-  }
-
-  /**
-   * Render a form to be used for creating a new professor.
-   * GET professors/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create({ }) {
+    return (page && perPage) ? data.paginate(page, perPage) : data.fetch()
   }
 
   /**
@@ -67,25 +53,10 @@ class ProfessorController {
    * GET professors/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
   async show({ params }) {
     const { id } = params
     return Professor.find(id)
-  }
-
-  /**
-   * Render a form to update an existing professor.
-   * GET professors/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit({}) {
   }
 
   /**
@@ -116,7 +87,6 @@ class ProfessorController {
    * DELETE professors/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
   async destroy({ params, response }) {
