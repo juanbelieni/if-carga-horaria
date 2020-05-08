@@ -19,39 +19,28 @@ class TurmaController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
   async index({ request }) {
     const {
-      page, perPage, semestre_ingresso, ano_ingresso,
-    } = request.only(['page', 'perPage', 'semestre_ingresso', 'ano_ingresso'])
+      page, perPage, semestre_ingresso, ano_ingresso, simulado,
+    } = request.only(['page', 'perPage', 'semestre_ingresso', 'ano_ingresso', 'simulado'])
 
-    return Database
+    const data = Database
       .table('turmas')
       .select('turmas.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
       .where((query) => {
-        if (semestre_ingresso) {
-          query
-            .whereIn('semestre_ingresso', semestre_ingresso)
+        if (simulado) {
+          query.whereIn('simulado', simulado)
+        } if (semestre_ingresso) {
+          query.whereIn('semestre_ingresso', semestre_ingresso)
         } if (ano_ingresso) {
           query.where('ano_ingresso', 'like', `%${ano_ingresso}%`)
         }
       })
       .join('ppcs', 'ppcs.id', 'ppc_id')
-      .paginate(page, perPage)
-  }
 
-  /**
-   * Render a form to be used for creating a new turma.
-   * GET turmas/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create({ request, response, view }) {}
+    return (page && perPage) ? data.paginate(page, perPage) : data
+  }
 
   /**
    * Create/sarve a new turma.
@@ -59,10 +48,9 @@ class TurmaController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store({ request, response }) {
-    const data = request.only(['ano_ingresso', 'semestre_ingresso', 'ppc_id'])
+  async store({ request }) {
+    const data = request.only(['ano_ingresso', 'semestre_ingresso', 'ppc_id', 'simulado'])
 
     return Turma.create(data)
   }
@@ -72,9 +60,6 @@ class TurmaController {
    * GET turmas/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
   async show({ params }) {
     const { id } = params
@@ -88,19 +73,6 @@ class TurmaController {
   }
 
   /**
-   * Render a form to update an existing turma.
-   * GET turmas/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit({
-    params, request, response, view,
-  }) {}
-
-  /**
    * Update turma details.
    * PUT or PATCH turmas/:id
    *
@@ -110,7 +82,7 @@ class TurmaController {
    */
   async update({ params, request, response }) {
     const { id } = params
-    const data = request.only(['ano_ingresso', 'semestre_ingresso', 'ppc_id'])
+    const data = request.only(['ano_ingresso', 'semestre_ingresso', 'ppc_id', 'simulado'])
     const turma = await Turma.find(id)
 
     if (turma === null) {
@@ -128,10 +100,9 @@ class TurmaController {
    * DELETE turmas/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {
+  async destroy({ params, response }) {
     const { id } = params
 
     const turma = await Turma.find(id)
