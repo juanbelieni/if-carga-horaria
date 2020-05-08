@@ -18,27 +18,32 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 
-Route.resource('ppcs', 'PpcController').validator(
-  new Map([[['ppcs.store'], ['StorePpc']]]),
-)
+Route.resource('ppcs', 'PpcController')
+  .apiOnly()
+  .validator(
+    new Map([[['ppcs.store'], ['StorePpc']]]),
+  )
 
-Route.resource('disciplinas', 'DisciplinaController').validator(
-  new Map([[['disciplinas.store'], ['StoreDisciplina']]]),
-)
+Route.resource('disciplinas', 'DisciplinaController')
+  .apiOnly()
+  .validator(
+    new Map([[['disciplinas.store'], ['StoreDisciplina']]]),
+  )
 
-Route.resource('turmas', 'TurmaController').validator(
-  new Map([[['turmas.store'], ['StoreTurma']]]),
-)
+Route.resource('turmas', 'TurmaController')
+  .apiOnly()
+  .validator(
+    new Map([[['turmas.store'], ['StoreTurma']]]),
+  )
 
-Route.resource('professores', 'ProfessorController').validator(
-  new Map([[['professores.store'], ['StoreProfessor']]]),
-)
+Route.resource('professores', 'ProfessorController')
+  .apiOnly()
+  .validator(
+    new Map([[['professores.store'], ['StoreProfessor']]]),
+  )
 
-Route.resource('cargas', 'CargaController').validator(
-  new Map([[['cargas.store'], ['StoreCarga']]]),
-)
-
-Route.group(() => {
-  Route.get('professores', 'RelatorioController.professores')
-  Route.get('turmas', 'RelatorioController.turmas')
-}).prefix('/relatorios')
+Route.resource('cargas', 'CargaController')
+  .only(['index', 'store'])
+  .validator(
+    new Map([[['cargas.store'], ['StoreCarga']]]),
+  )
