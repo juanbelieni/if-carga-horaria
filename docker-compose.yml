@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  adonis-mysql:
+    image: mysql:5.7
+    container_name: "${APP_NAME}-mysql"
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_USER: ${DB_USER}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    networks:
+      - api-network
+    restart: always
+  adonis-api:
+    container_name: "${APP_NAME}-api"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/app
+    ports:
+      - "3333:3333"
+    depends_on:
+      - adonis-mysql
+    networks:
+      - api-network
+    environment:
+      DB_HOST: adonis-mysql
+
+networks: 
+  api-network:
