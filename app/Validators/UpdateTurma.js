@@ -3,9 +3,9 @@
 class StoreTurma {
   get rules() {
     return {
-      ano_ingresso: 'required|year',
+      ano_ingresso: 'year',
       semestre_ingresso: 'in:0,1,2',
-      ppc_id: 'required|exists:ppcs,id',
+      ppc_id: 'exists:ppcs,id',
     }
   }
 
@@ -27,11 +27,9 @@ class StoreTurma {
 
   get messages() {
     return {
-      'ano_ingresso.required': 'Esse campo é obrigatório',
       'ano_ingresso.year': 'Insira um ano válido',
-      'ppc_id.required': 'Esse campo é obrigatório',
-      'ppc_id.exists': 'Esse PPC não existe no banco de dados',
       'semestre_ingresso.in': 'Semestre de ingresso inválido',
+      'ppc_id.exists': 'Esse PPC não existe no banco de dados',
     }
   }
 }

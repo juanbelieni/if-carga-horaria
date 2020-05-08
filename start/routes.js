@@ -22,18 +22,21 @@ Route.resource('ppcs', 'PpcController')
   .apiOnly()
   .validator(
     new Map([[['ppcs.store'], ['StorePpc']]]),
+    new Map([[['ppcs.update'], ['UpdatePpc']]]),
   )
 
 Route.resource('disciplinas', 'DisciplinaController')
   .apiOnly()
   .validator(
     new Map([[['disciplinas.store'], ['StoreDisciplina']]]),
+    new Map([[['disciplinas.update'], ['UpdateDisciplina']]]),
   )
 
 Route.resource('turmas', 'TurmaController')
   .apiOnly()
   .validator(
     new Map([[['turmas.store'], ['StoreTurma']]]),
+    new Map([[['turmas.update'], ['UpdateTurma']]]),
   )
 
 Route.resource('professores', 'ProfessorController')
