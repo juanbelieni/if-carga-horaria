@@ -53,5 +53,5 @@ Route.resource('cargas', 'CargaController')
 
 
 Route.group(() => {
-  Route.get('carga-horaria', 'ReportController.carga_horaria')
+  Route.get('carga-horaria', 'ReportController.cargaHoraria')
 }).prefix('reports')

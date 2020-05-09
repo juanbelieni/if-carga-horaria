@@ -10,7 +10,7 @@ class ReportController {
    * @param {object} ctx
    * @param {Request} ctx.request
    */
-  async carga_horaria({ request }) {
+  async cargaHoraria({ request }) {
     const { fields, turmas, professores } = request.only(['fields', 'turmas', 'professores'])
     const fieldsQueries = {
       disciplina: 'disciplina as Disciplina',
