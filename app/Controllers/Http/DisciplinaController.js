@@ -32,7 +32,7 @@ class DisciplinaController {
           query.where('ppc_id', ppc_id)
         }
       })
-      .orderByRaw('ppc_id, periodo, nome')
+      .orderByRaw(['ppc_id', 'periodo', 'nome'])
 
     return (page && perPage) ? data.paginate(page, perPage) : data.fetch()
   }
