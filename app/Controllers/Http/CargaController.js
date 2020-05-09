@@ -25,7 +25,7 @@ class CargaController {
       page, perPage, turma_id, disciplina_id, periodo,
     } = request.only(['page', 'perPage', 'turma_id', 'disciplina_id', 'periodo'])
 
-    const q = Database
+    const data = Database
       .table('cargas_horarias')
       .where((query) => {
         if (turma_id) {
@@ -35,9 +35,11 @@ class CargaController {
         } if (disciplina_id) {
           query.where('disciplina_id', disciplina_id)
         }
-      }).select('*')
+      })
+      .orderBy(['ano', 'semestre', 'turma_id', 'disciplina'])
+      .select('*')
 
-    return (page && perPage) ? q.paginate(page, perPage) : q
+    return (page && perPage) ? data.paginate(page, perPage) : data
   }
 
   /**

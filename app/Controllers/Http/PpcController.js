@@ -38,6 +38,7 @@ class PpcController {
           query.where('ano', 'like', `%${ano}%`)
         }
       })
+      .orderBy(['ano', 'formacao', 'nome'])
 
     return (page && perPage) ? data.paginate(page, perPage) : data.fetch()
   }

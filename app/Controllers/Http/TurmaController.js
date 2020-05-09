@@ -38,6 +38,7 @@ class TurmaController {
         }
       })
       .join('ppcs', 'ppcs.id', 'ppc_id')
+      .orderBy(['ano_ingresso', 'semestre_ingresso', 'formacao', 'nome'])
 
     return (page && perPage) ? data.paginate(page, perPage) : data
   }
