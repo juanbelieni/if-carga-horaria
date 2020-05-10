@@ -29,7 +29,8 @@ class CargaHorariaSchema extends Schema {
         + 'from turmas inner join ppcs on turmas.ppc_id = ppcs.id '
         + 'inner join disciplinas as d on d.ppc_id = ppcs.id '
         + 'left outer join cargas as c on c.disciplina_id = d.id and c.turma_id = turmas.id '
-        + 'left outer join professores on professores.id = c.professor_id',
+        + 'left outer join professores on professores.id = c.professor_id '
+        + 'order by `ano`, `semestre`, `turma`, `professor`, `disciplina` asc',
     )
   }
 
