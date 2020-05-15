@@ -27,7 +27,13 @@ class TurmaController {
 
     const data = Database
       .table('turmas')
-      .select('turmas.*', 'ppcs.duracao', 'ppcs.semestral', Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'))
+      .select([
+        'turmas.*',
+        'ppcs.duracao',
+        'ppcs.semestral',
+        Database.raw('CONCAT(ppcs.nome, " ", ppcs.formacao, " ", ppcs.ano) as ppc'),
+        Database.raw('concat(ppcs.nome, " ", ppcs.formacao, " - ", concat(ano_ingresso, if(semestral, concat("/", semestre_ingresso), ""))) as turma'),
+      ])
       .where((query) => {
         if (simulado) {
           query.whereIn('simulado', simulado)

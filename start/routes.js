@@ -50,3 +50,8 @@ Route.resource('cargas', 'CargaController')
   .validator(
     new Map([[['cargas.store'], ['StoreCarga']]]),
   )
+
+
+Route.group(() => {
+  Route.get('carga-horaria', 'ReportController.cargaHoraria')
+}).prefix('reports')
